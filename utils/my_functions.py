@@ -58,33 +58,34 @@ def show_users_from(users_list:list) -> None:
         print(f'Twój znajomy {user['name']} dodał {user["posts"]} ')
 
 
-def gui(users_list:list) -> None:
- while True:
-   print(f'MENU: \n'
-      f'0: Zakoncz program\n'
-      f'1: Wyswietl uzytkownka\n'   
-      f'2: Podaj uzytkownika\n'
-      f'3: Usun uzytkownika\n'
-      f'4: Modyfikuj uzytkownika')
+def gui(users_list: list) -> None:
+    while True:
+        print(f'MENU: \n'
+            f'0: Zakoncz program\n'
+            f'1: Wyswietl uzytkownka\n'   
+            f'2: Podaj uzytkownika\n'
+            f'3: Usun uzytkownika\n'
+            f'4: Modyfikuj uzytkownika')
 
-  menu_option = input('Podaj funckje do wywolania')
-  print(f'Wybrano funkcje{menu_option}')
+        menu_option = input('Podaj funkcję do wywołania: ')
+        print(f'Wybrano funkcję {menu_option}')
 
-  match menu_option:
-      case '0':
-          print('koncze prace')
-          break
-      case '1':
-          print('Wyswietanie liste uzytownikow')
-          show_users_from(users_list)
-      case '2':
-          print('Dodawanie uzytkownikow')
-          add_user_to(users_list)
-      case '3':
-          print('Usuwanie uzytkownika')
-          add_user_to(users_list)
-      case '4':
-          print('Modyfikuj')
+        if menu_option == '0':
+            print('Kończę pracę')
+            break
+        elif menu_option == '1':
+            print('Wyświetlanie listy użytkowników')
+            show_users_from(users_list)
+        elif menu_option == '2':
+            print('Dodawanie użytkowników')
+            add_user_to(users_list)
+        elif menu_option == '3':
+            print('Usuwanie użytkownika')
+            remove_user_from(users_list)
+        elif menu_option == '4':
+            print('Modyfikuj')
+
+gui(users_list)
 
 
 
