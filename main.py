@@ -6,7 +6,7 @@ from utils.my_functions import add_user_to, remove_user_from, show_users_from
 # show_users_from(users_list)
 
 
-gui()
+gui(users_list)
 #for user in users_list:
     #print(f'users_list)
     #print(f'Twój znajomy {user['name']} dodał {user["posts"]} ')
