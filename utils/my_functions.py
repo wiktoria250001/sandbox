@@ -1,106 +1,77 @@
-from newone import users_list
-
-def add_user_to(users_list:list) -> None:
+def add_user_to(users_list: list) -> None:
     """
     add object to list
-    :param users_list: user list
+    :param users_list: list - user list
     :return: None
     """
-    name = input('podaj imie?')
-    posts = input('podaj liczbe postów?')
-    users_list.append({"name": name,"posts": posts})
-name = input(' podaj imie uzytkownika do usunecia: ')
+    name = input('podaj imie ?')
+    posts = input('podaj liczbe postow ?')
+    users_list.append({'name': name, 'posts': posts})
+
+
 def remove_user_from(users_list: list) -> None:
     """
     remove object from list
-    :param users_list: List - user list
+    :param users_list: list - user list
     :return: None
     """
     tmp_list = []
-    name = input('podaj imie uzytkownika do usuniecia:')
-
+    name = input('podaj imie uzykownika do usuniecia: ')
     for user in users_list:
-        if user["name"]== name:
-            print(f'Znaleziono uzytkownika{user}')
-            #users_list.remove(user)
+        if user["name"] == name:
             tmp_list.append(user)
-    print('Znaleziono nastepujacych uzytkownikow :')
-    print("0: Usun wszyskich znalezionych uzytkownikow")
-    for numerek,user_to_be_removed in enumerate(tmp_list):
-        print( f'{numerek+1}: {user_to_be_removed}')
-    numer = int(input(f'wybierz numer uzytkownka do usuniecia: '))
+    print('Znaleziono użytkowników:')
+    print('0: Usuń wszystkich znalezionych użytkowników')
+    for numerek, user_to_be_removed in enumerate(tmp_list):
+        print(f'{numerek + 1}: {user_to_be_removed}')
+    numer = int(input(f'wybierz numer użytkownika do usuniecia: '))
     if numer == 0:
         for user in tmp_list:
-            if user['name'] == name:
-                users_list.remove(tmp_list[numer-1])
+            users_list.remove(user)
     else:
-     users_list.remove(tmp_list[numer-1])
-
-    # print(numer)
-    # print(tmp_list[numer-1])
-    #   users_list.remove(tmp_list[numer-1])
+        users_list.remove(tmp_list[numer - 1])
 
 
-     remove_user_from(users_list)
-
-
-
-#add_user_to(users_list)
-#posts = input('podaj liczbe postów?')
-#users_list.append({'name': name,'posts': posts})
-#name = input('podaj imie?')
-#posts = input('podaj liczbe postów?')
-#users_list.append({'name': name,'posts': posts})
-#make it work, make it properly, make it fast
-
-def show_users_from(users_list:list) -> None:
+def show_users_from(users_list:list)->None:
     for user in users_list:
-        print(f'Twój znajomy {user['name']} dodał {user["posts"]} ')
+        print(f'Twój znajomy {user["name"]} dodał {user["posts"]}')
 
-def update_user(users_list: list[dict,dict]) -> None:
-    nick_of_user = input('podaj nick uzytkownika do modyfikacji')
+def update_user(users_list: list[dict, dict]) -> None:
+    nick_of_user = input('podaj nick użytkownika do modyfikacji')
     print(nick_of_user)
     for user in users_list:
         if user['nick'] == nick_of_user:
-            print('znaleziono !!!')
+            print('Znaleziono!!!')
             user['name'] = input('podaj nowe imie: ')
-            user['nick'] = input('podaj nowa ksywe: ')
+            user['nick'] = input('podaj nowa ksywke: ')
             user['posts'] = int(input('podaj liczbe postow: '))
 
-
-def gui(users_list: list) -> None:
+def gui(users_list:list) -> None:
     while True:
         print(f'MENU: \n'
-            f'0: Zakoncz program\n'
-            f'1: Wyswietl uzytkownka\n'   
-            f'2: Podaj uzytkownika\n'
-            f'3: Usun uzytkownika\n'
-            f'4: Modyfikuj uzytkownika')
-
-        menu_option = input('Podaj funkcję do wywołania: ')
+              f'0: Zakończ program \n'
+              f'1: Wyświetl użytkowników \n'
+              f'2: Dodaj użytkownika \n'
+              f'3: Usuń użytkownika \n'
+              f'4: Modyfikuj użytkownika'
+              )
+        menu_option = input('Podaj funkcję do wywołania')
         print(f'Wybrano funkcję {menu_option}')
 
-        if menu_option == '0':
-            print('Kończę pracę')
-            break
-        elif menu_option == '1':
-            print('Wyświetlanie listy użytkowników')
-            show_users_from(users_list)
-        elif menu_option == '2':
-            print('Dodawanie użytkowników')
-            add_user_to(users_list)
-        elif menu_option == '3':
-            print('Usuwanie użytkownika')
-            remove_user_from(users_list)
-        elif menu_option == '4':
-            print('Modyfikuj')
-            update_user(users_list)
-
-
-
-
-
-
-
-
+        match menu_option:
+            case '0':
+                print('Kończę pracę')
+                break
+            case '1':
+                print('Wyświetlanie listę użytkowników')
+                show_users_from(users_list)
+            case '2':
+                print('Dodawanie użytkownika')
+                add_user_to(users_list)
+            case '3':
+                print('Usuwanie użytkownika')
+                remove_user_from(users_list)
+            case '4':
+                print('Modyfikuję użytkownika')
+                update_user(users_list)
 
