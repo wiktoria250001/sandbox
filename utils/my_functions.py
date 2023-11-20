@@ -57,6 +57,16 @@ def show_users_from(users_list:list) -> None:
     for user in users_list:
         print(f'Twój znajomy {user['name']} dodał {user["posts"]} ')
 
+def update_user(users_list: list[dict,dict]) -> None:
+    nick_of_user = input('podaj nick uzytkownika do modyfikacji')
+    print(nick_of_user)
+    for user in users_list:
+        if user['nick'] == nick_of_user:
+            print('znaleziono !!!')
+            user['name'] = input('podaj nowe imie: ')
+            user['nick'] = input('podaj nowa ksywe: ')
+            user['posts'] = int(input('podaj liczbe postow: '))
+
 
 def gui(users_list: list) -> None:
     while True:
@@ -84,16 +94,13 @@ def gui(users_list: list) -> None:
             remove_user_from(users_list)
         elif menu_option == '4':
             print('Modyfikuj')
-
-gui(users_list)
-
+            update_user(users_list)
 
 
 
 
-#print(f'Twój znjaomy{zmienna_na_dane[0]["imie"]} opublikowal {zmienna_na_dane[0]["posts"]} postow!!)
-#zmienna_na_imie = input ('Podaj nazwe uzytkownika')
-#print (f'TO JEST FACEBOOK {zmienna_na_dane[1]["nick"]} !!!!')
+
+
 
 
 
