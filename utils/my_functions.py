@@ -1,3 +1,8 @@
+import requests
+from bs4 import BeautifulSoup
+import folium
+from dane import users_list
+
 def add_user_to(users_list: list) -> None:
     """
     add object to list
@@ -45,6 +50,77 @@ def update_user(users_list: list[dict, dict]) -> None:
             user['name'] = input('podaj nowe imie: ')
             user['nick'] = input('podaj nowa ksywke: ')
             user['posts'] = int(input('podaj liczbe postow: '))
+            user['city'] = input('podaj miasto')
+
+# pobranie strony internetowej
+nazwa_miejscowosci = 'Gdańsk'
+def get_coordinate_of(city:str)->list[float,float]:
+    #city = 'Gdansk'
+    adres_URL = f'https://pl.wikipedia.org/wiki/{city}'
+    #adres_URL1= f'https://pl.wikipedia.org/wiki/Kuryłówka'
+
+    response = requests.get(url=adres_URL)
+    response_html = BeautifulSoup(response.text, 'html.parser')
+    #pobranie współrzednych
+    response_html_latitude = response_html.select('.latitude')[1].text # . poniewaz class
+    response_html_latitude = float(response_html_latitude.replace(',','.'))
+    response_html_longitude = response_html.select('.longitude')[1].text # . poniewaz class
+    response_html_longitude = float(response_html_longitude.replace(',','.'))
+    #print(response_html_latitude, response_html_longitude)
+    return [response_html_latitude, response_html_longitude]
+print(get_coordinate_of(nazwa_miejscowosci))
+
+#for item in nazwy_miejscowosci
+#print(get_coordinate_of(item))
+from dane import users_list
+# zwrócic mape z pinezka odnoszczaca sie do uzytkowanika podanego z klawiatury
+def get_map_one_user(user:str)->None:
+    city = get_coordinate_of(user['city'])
+    map = folium.Map(location=get_coordinate_of(city='Zamość'), tiles="OpenStreetMap", zoom_start=15)
+    for user in users_list:
+        folium.Marker(
+            location=get_coordinate_of(city=user['city']),
+            popup=f'Tu rządzi {user["name"]} z geoinforamtyki 2023\n ouu yeeea \n !!!!!!'
+        ).add_to(map)
+
+    map.save('mapka.html')
+
+
+
+
+#zwroci mape z wsztystkimi uzytkownikami z danej listy znajomymi
+
+
+
+##RYSOWANIE MAPY
+# city = get_coordinate_of(city='Zamość')
+# map = folium.Map(location=get_coordinate_of(city='Zamość'), tiles="OpenStreetMap", zoom_start=7)
+# for item in nazwa_miejscowosci:
+#     folium.Marker(
+#         location=city,
+#         popup='GEOINFORAMTYKA RZĄDZI OU YEEEAAAAAH!'
+# ).add_to(map)
+#
+# map.save('mapka.html')
+#
+# city = get_coordinate_of(users: List) -> None:
+#     map = folium.Map(location=get_coordinate_of(city='Zamość'), tiles="OpenStreetMap", zoom_start=7)
+#     for item in nazwa_miejscowosci:
+#         folium.Marker(
+#             location=city,
+#             popup='GEOINFORAMTYKA RZĄDZI OU YEEEAAAAAH!'
+# ).add_to(map)
+#
+# map.save('mapka.html')
+# from dane import users_list
+# get_map_of(users_list)
+
+
+
+
+
+
+
 
 def gui(users_list:list) -> None:
     while True:
@@ -54,6 +130,8 @@ def gui(users_list:list) -> None:
               f'2: Dodaj użytkownika \n'
               f'3: Usuń użytkownika \n'
               f'4: Modyfikuj użytkownika'
+              f'5: Wygeneruj mapę z użytkownikiem'
+              f'6: Wygeneruj mapę z uzytkownikami'
               )
         menu_option = input('Podaj funkcję do wywołania')
         print(f'Wybrano funkcję {menu_option}')
@@ -74,4 +152,16 @@ def gui(users_list:list) -> None:
             case '4':
                 print('Modyfikuję użytkownika')
                 update_user(users_list)
+            case '5' :
+                print('Rysuję mapę z użytkownikiem')
+                user = input('podaj nazwe uzytkownika do modyfikacji')
+                for item in users_list:
+                    if item['nick'] == user:
+                        get_map_one_user(item)
+            case '6'  :
+                print('Rysuję mapę z użytkownikami')
+                get_map_of(users_list)
+
+
+
 
