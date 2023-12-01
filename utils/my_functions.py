@@ -68,29 +68,36 @@ def get_coordinate_of(city:str)->list[float,float]:
     response_html_longitude = float(response_html_longitude.replace(',','.'))
     #print(response_html_latitude, response_html_longitude)
     return [response_html_latitude, response_html_longitude]
-print(get_coordinate_of(nazwa_miejscowosci))
 
-#for item in nazwy_miejscowosci
-#print(get_coordinate_of(item))
-from dane import users_list
 # zwrócic mape z pinezka odnoszczaca sie do uzytkowanika podanego z klawiatury
-def get_map_one_user(user:str)->None:
+def get_map_one_user(user)->None:
     city = get_coordinate_of(user['city'])
-    map = folium.Map(location=get_coordinate_of(city='Zamość'), tiles="OpenStreetMap", zoom_start=15)
-    for user in users_list:
+    map = folium.Map(
+        location=get_coordinate_of(city='Zamość'),
+        tiles="OpenStreetMap",
+        zoom_start=15
+    )
+    folium.Marker(
+        location=city,
+        popup=f'Tu rządzi: {user["name"]},'
+              f'postów: {user["posts"]},
+        ).add_to(map)
+        map.save(f'mapka_{user["name"]}.html')
+def get_map_of(users) -> None:
+    map = folium.Map(
+        location= [52.3, 21.0],
+        tiles="OpenStreetMap",
+        zoom_start=7,
+    )
+    for user in users:
         folium.Marker(
             location=get_coordinate_of(city=user['city']),
-            popup=f'Tu rządzi {user["name"]} z geoinforamtyki 2023\n ouu yeeea \n !!!!!!'
-        ).add_to(map)
-
-    map.save('mapka.html')
-
-
-
+            popup= f'Użytkownik: {user["name"]} \n'
+                   f'Liczba postów {user['posts']}'
+        )add_to(map)
+        map.save('mapkaaa.html')
 
 #zwroci mape z wsztystkimi uzytkownikami z danej listy znajomymi
-
-
 
 ##RYSOWANIE MAPY
 # city = get_coordinate_of(city='Zamość')
