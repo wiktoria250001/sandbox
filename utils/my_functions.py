@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import folium
 
+
 def add_user_to(users_list: list) -> None:
     """
     add object to list
@@ -10,7 +11,8 @@ def add_user_to(users_list: list) -> None:
     """
     name = input('podaj imie ?')
     posts = input('podaj liczbe postow ?')
-    users_list.append({'name': name, 'posts': posts})
+    city = input('podaj miasto ?')
+    users_list.append({'name': name, 'posts': posts, 'city': city})
 
 
 def remove_user_from(users_list: list) -> None:
