@@ -1,6 +1,20 @@
+import psycopg2 as ps
 from bs4 import BeautifulSoup
 import requests
 import folium
+
+db_params = ps.connect(
+    database='postgres',
+    user='postgres',
+    password='wiki3476',
+    host='localhost',
+    port=5433
+)
+#engine=sqlalchemy.create_engine(db_params)
+#connection=engine.connect()
+
+
+cursor= db_params.cursor()
 
 
 def add_user_to(users_list: list) -> None:
@@ -11,6 +25,7 @@ def add_user_to(users_list: list) -> None:
     """
     name = input('podaj imie ?')
     posts = input('podaj liczbe postow ?')
+    nick=input('podaj nick ?')
     city = input('podaj miasto ?')
     users_list.append({'name': name, 'posts': posts, 'city': city})
 
