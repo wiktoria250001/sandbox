@@ -100,7 +100,7 @@ def get_map_one_user(user: str) -> None:
     sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE city='{city}';"
     cursor.execute(sql_query_1)
     query_result = cursor.fetchall()
-    city = get_coordinates(city),
+    city =get_coordinates_of(city),
     map = folium.Map(location=city,
                      tiles='OpenStreetMap',
                      zoom_start=14
@@ -122,7 +122,7 @@ def get_map_of(users: list[dict, dict]) -> None:
     cursor.execute(sql_query_1)
     query_result = cursor.fetchall()
     for user in query_result:
-        folium.Marker(location=get_coordinates(city=user[1]),
+        folium.Marker(location=get_coordinates_of(city=user[1]),
                       popup=f'Użytkownik: {user[2]}\n'
                             f'Liczba postow: {user[4]}'
                       ).add_to(map)
