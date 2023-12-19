@@ -13,11 +13,10 @@ db_params = ps.connect(
 #engine=sqlalchemy.create_engine(db_params)
 #connection=engine.connect()
 
-
 cursor= db_params.cursor()
 
 
-def add_user_to(users_list: list) -> None:
+def add_user_to() -> None:
     """
     add object to list
     :param users_list: list - user list
@@ -33,7 +32,7 @@ def add_user_to(users_list: list) -> None:
 
 
 
-def remove_user_from(users_list: list) -> None:
+def remove_user_from() -> None:
     """
     remove object from list
     :param users_list: list - user list
@@ -58,13 +57,13 @@ def remove_user_from(users_list: list) -> None:
         cursor.execute(sql_query_2)
         db_params.commit()
 
-def show_users_from(users_list:list)->None:
+def show_users_from()->None:
     sql_query_1 = f"SELECT * FROM public.serafin_psip;"
     cursor.execute(sql_query_1)
     query_result = cursor.fetchall()
     for row in query_result:
         print(f'Twoj znajomy {row[2]} opublikowal {row[4]} postow')
-def update_user(users_list: list[dict, dict]) -> None:
+def update_user() -> None:
     nick_of_user = input('podaj nick użytkownika do modyfikacji')
     sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE nick='{nick_of_user}';"
     cursor.execute(sql_query_1)
@@ -80,7 +79,7 @@ def update_user(users_list: list[dict, dict]) -> None:
 
 ########################mapka
 
-def get_coordinates_of(city: str) -> list[float, float]:
+def get_coordinates_of(city:str) -> list[float, float]:
     # pobranie strony internetowe
     adres_URL = f'https://pl.wikipedia.org/wiki/{city}'
     response = requests.get(url=adres_URL)
@@ -95,7 +94,7 @@ def get_coordinates_of(city: str) -> list[float, float]:
     return [response_html_latitude, response_html_longitude]
 
 # zwrócić mape z pinezką odnoszącą się do użytkownika podanego z klawiatury
-def get_map_one_user(user: str) -> None:
+def get_map_one_user() -> None:
     city = input('Podaj miasto usera: ')
     sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE city='{city}';"
     cursor.execute(sql_query_1)
@@ -113,7 +112,7 @@ def get_map_one_user(user: str) -> None:
     map.save(f'mapka_{query_result[0][1]}.html')
 
 
-def get_map_of(users: list[dict, dict]) -> None:
+def get_map_of() -> None:
     map = folium.Map(location=[52.3, 21.0],
                      tiles='OpenStreetMap',
                      zoom_start=7
