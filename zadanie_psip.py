@@ -24,3 +24,4 @@ def dodaj_uzytkownika(user:str):
 dodaj_uzytkownika(input('dodaj uzytkownika'))
 ###dodac wszystkich uzytkownikow do tabeli
 
+

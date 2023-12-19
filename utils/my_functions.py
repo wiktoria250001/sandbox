@@ -25,9 +25,12 @@ def add_user_to(users_list: list) -> None:
     """
     name = input('podaj imie ?')
     posts = input('podaj liczbe postow ?')
-    nick=input('podaj nick ?')
+    nick = input('podaj nick ?')
     city = input('podaj miasto ?')
-    users_list.append({'name': name, 'posts': posts, 'city': city})
+    sql_query_1 = f"INSERT INTO public.serafin_psip(city, name, nick, posts) VALUES ('{city}', '{name}', '{nick}', '{posts}');"
+    cursor.execute(sql_query_1)
+    db_params.commit()
+
 
 
 def remove_user_from(users_list: list) -> None:
@@ -36,37 +39,43 @@ def remove_user_from(users_list: list) -> None:
     :param users_list: list - user list
     :return: None
     """
-    tmp_list = []
+
     name = input('podaj imie uzykownika do usuniecia: ')
-    for user in users_list:
-        if user["name"] == name:
-            tmp_list.append(user)
+    sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE name='{name}';"
+    cursor.execute(sql_query_1)
+    query_result = cursor.fetchall()
     print('Znaleziono użytkowników:')
     print('0: Usuń wszystkich znalezionych użytkowników')
-    for numerek, user_to_be_removed in enumerate(tmp_list):
+    for numerek, user_to_be_removed in enumerate(query_result):
         print(f'{numerek + 1}: {user_to_be_removed}')
     numer = int(input(f'wybierz numer użytkownika do usuniecia: '))
     if numer == 0:
-        for user in tmp_list:
-            users_list.remove(user)
+        sql_query_2 = f"DELETE * FROM public.serafin_psip;"
+        cursor.execute(sql_query_2)
+        db_params.commit()
     else:
-        users_list.remove(tmp_list[numer - 1])
-
+        sql_query_2 = f"DELETE FROM public.serafin_psip WHERE name='{query_result[numer - 1][2]}';"
+        cursor.execute(sql_query_2)
+        db_params.commit()
 
 def show_users_from(users_list:list)->None:
-    for user in users_list:
-        print(f'Twój znajomy {user["name"]} dodał {user["posts"]}')
-
+    sql_query_1 = f"SELECT * FROM public.serafin_psip;"
+    cursor.execute(sql_query_1)
+    query_result = cursor.fetchall()
+    for row in query_result:
+        print(f'Twoj znajomy {row[2]} opublikowal {row[4]} postow')
 def update_user(users_list: list[dict, dict]) -> None:
     nick_of_user = input('podaj nick użytkownika do modyfikacji')
-    print(nick_of_user)
-    for user in users_list:
-        if user['nick'] == nick_of_user:
-            print('Znaleziono!!!')
-            user['name'] = input('podaj nowe imie: ')
-            user['nick'] = input('podaj nowa ksywke: ')
-            user['posts'] = int(input('podaj liczbe postow: '))
-            user['city'] = input('podaj miasto')
+    sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE nick='{nick_of_user}';"
+    cursor.execute(sql_query_1)
+    print('Znaleziono')
+    name = input('podaj nowe imie: ')
+    nick = input('podaj nowe ksywe: ')
+    posts = int(input('podaj liczbw postów: '))
+    city = input('podaj miasto: ')
+    sql_query_2 = f"UPDATE public.serafin_psip SET name='{name}',nick='{nick}', posts='{posts}', city='{city}' WHERE nick='{nick_of_user}';"
+    cursor.execute(sql_query_2)
+    db_params.commit()
 
 
 ########################mapka
@@ -87,33 +96,37 @@ def get_coordinates_of(city: str) -> list[float, float]:
 
 # zwrócić mape z pinezką odnoszącą się do użytkownika podanego z klawiatury
 def get_map_one_user(user: str) -> None:
-    city = get_coordinates_of(user['city'])
-    map = folium.Map(
-        location=city,
-        tiles="OpenStreetMap",
-        zoom_start=15,
-    )
-    folium.Marker(
-        location=city,
-        popup=f'Tu rządzi: {user["name"]},'
-              f'postów: {user["posts"]} '
-    ).add_to(map)
-    map.save(f'mapka_{user["name"]}.html')
+    city = input('Podaj miasto usera: ')
+    sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE city='{city}';"
+    cursor.execute(sql_query_1)
+    query_result = cursor.fetchall()
+    city = get_coordinates(city),
+    map = folium.Map(location=city,
+                     tiles='OpenStreetMap',
+                     zoom_start=14
+                     )  # location to miejsce wycentrowania mapy
+    for user in query_result:
+        folium.Marker(location=city,
+                      popup=f'Użytkownik: {user[2]}\n'
+                            f'Liczba postow: {user[4]}'
+                      ).add_to(map)
+    map.save(f'mapka_{query_result[0][1]}.html')
 
 
 def get_map_of(users: list[dict, dict]) -> None:
-    map = folium.Map(
-        location=[52.3, 21.0],
-        tiles="OpenStreetMap",
-        zoom_start=7,
-    )
-    for user in users:
-        folium.Marker(
-            location=get_coordinates_of(city=user['city']),
-            popup=f'Użytkownik: {user["name"]} \n'
-                  f'Liczba postów {user["posts"]}'
-        ).add_to(map)
-    map.save('mapka.html')
+    map = folium.Map(location=[52.3, 21.0],
+                     tiles='OpenStreetMap',
+                     zoom_start=7
+                     )  # location to miejsce wycentrowania mapy
+    sql_query_1 = f"SELECT * FROM public.serafin_psip;"
+    cursor.execute(sql_query_1)
+    query_result = cursor.fetchall()
+    for user in query_result:
+        folium.Marker(location=get_coordinates(city=user[1]),
+                      popup=f'Użytkownik: {user[2]}\n'
+                            f'Liczba postow: {user[4]}'
+                      ).add_to(map)
+        map.save('mapka.html')
 
 def gui(users_list:list) -> None:
     while True:
@@ -158,3 +171,21 @@ def gui(users_list:list) -> None:
 def pogoda_z(miasto: str):
     url = f"https://danepubliczne.imgw.pl/api/data/synop/station/{miasto}"
     return requests.get(url).json()
+
+class User:
+    def __init__(self, city, name, nick, posts):
+        self.city = city
+        self.name=name
+        self.nick=nick
+        self.posts=posts
+    def pogoda_z(self,miasto: str):
+        URL = f'https://danepubliczne.imgw.pl/api/data/synop/station/{miasto}'
+        return requests.get(URL).json()
+
+npc_1=User(city='Zamość', name='Marek', nick='mmm', posts=100)
+npc_2=User(city='Lublin',  name='Mateusz', nick='Św', posts=60)
+print(npc_1.city)
+print(npc_2.city)
+
+print(npc_1.pogoda_z(npc_1.city))
+print(npc_2.pogoda_z(npc_2.city))
