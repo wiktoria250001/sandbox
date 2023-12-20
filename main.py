@@ -1,7 +1,7 @@
 from dane import users_list
 from utils.my_functions import gui
 
-gui(users_list)
+gui()
 #2todoo włączyć do kodu aktualnego obsługę bazy danych
 #1todo dodac tabeledobazy danych reprezentujaca uzytkownika
 #todo napisac klase użytkownika  o strukturze zgodnej z ta zdefiniowana w my_data
