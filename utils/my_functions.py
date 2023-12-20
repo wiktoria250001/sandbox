@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import folium
 
-db_params = ps.connect(
+db_params =ps.connect(
     database='postgres',
     user='postgres',
     password='wiki3476',
@@ -13,7 +13,7 @@ db_params = ps.connect(
 #engine=sqlalchemy.create_engine(db_params)
 #connection=engine.connect()
 
-cursor= db_params.cursor()
+cursor=db_params.cursor()
 
 
 def add_user_to() -> None:
@@ -42,11 +42,11 @@ def remove_user_from() -> None:
     name = input('podaj imie uzykownika do usuniecia: ')
     sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE name='{name}';"
     cursor.execute(sql_query_1)
-    query_result = cursor.fetchall()
+    query_result =cursor.fetchall()
     print('Znaleziono użytkowników:')
     print('0: Usuń wszystkich znalezionych użytkowników')
     for numerek, user_to_be_removed in enumerate(query_result):
-        print(f'{numerek + 1}: {user_to_be_removed}')
+        print(f'{numerek + 1}. {user_to_be_removed}')
     numer = int(input(f'wybierz numer użytkownika do usuniecia: '))
     if numer == 0:
         sql_query_2 = f"DELETE * FROM public.serafin_psip;"
@@ -99,7 +99,7 @@ def get_map_one_user() -> None:
     sql_query_1 = f"SELECT * FROM public.serafin_psip WHERE city='{city}';"
     cursor.execute(sql_query_1)
     query_result = cursor.fetchall()
-    city =get_coordinates_of(city),
+    city =get_coordinates_of(city)
     map = folium.Map(location=city,
                      tiles='OpenStreetMap',
                      zoom_start=14
@@ -127,7 +127,7 @@ def get_map_of() -> None:
                       ).add_to(map)
         map.save('mapka.html')
 
-def gui(users_list:list) -> None:
+def gui() -> None:
     while True:
         print(f'MENU: \n'
               f'0: Zakończ program \n'
@@ -147,25 +147,22 @@ def gui(users_list:list) -> None:
                 break
             case '1':
                 print('Wyświetlanie listę użytkowników')
-                show_users_from(users_list)
+                show_users_from()
             case '2':
                 print('Dodawanie użytkownika')
-                add_user_to(users_list)
+                add_user_to()
             case '3':
                 print('Usuwanie użytkownika')
-                remove_user_from(users_list)
+                remove_user_from()
             case '4':
                 print('Modyfikuję użytkownika')
-                update_user(users_list)
+                update_user()
             case '5':
                 print('Rysuję mapę z użytkownikiem')
-                user = input('podaj nazwę użytkownika do modyfikacji')
-                for item in users_list:
-                    if item['nick'] == user:
-                        get_map_one_user(item)
+                get_map_one_user()
             case '6':
                 print('Rysyję mapę z wszystkimi użytkownikami')
-                get_map_of(users_list)
+                get_map_of()
 
 def pogoda_z(miasto: str):
     url = f"https://danepubliczne.imgw.pl/api/data/synop/station/{miasto}"
