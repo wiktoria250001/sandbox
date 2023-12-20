@@ -178,8 +178,8 @@ class User:
         URL = f'https://danepubliczne.imgw.pl/api/data/synop/station/{miasto}'
         return requests.get(URL).json()
 
-npc_1=User(city='Zamość', name='Marek', nick='mmm', posts=100)
-npc_2=User(city='Lublin',  name='Mateusz', nick='Św', posts=60)
+npc_1=User(city='zamosc', name='Marek', nick='mmm', posts=100)
+npc_2=User(city='gdansk',  name='Agata', nick='AAA', posts=1_0_000)
 print(npc_1.city)
 print(npc_2.city)
 
